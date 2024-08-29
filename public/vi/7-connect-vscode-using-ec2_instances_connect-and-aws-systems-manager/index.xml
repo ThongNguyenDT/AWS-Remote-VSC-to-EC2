@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kết nối VScode bằng EC2_Instances_Connect và AWS Systems Manager on AWS System Manager</title>
+    <link>https://levuxuanan.github.io/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/vi/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/</link>
+    <description>Recent content in Kết nối VScode bằng EC2_Instances_Connect và AWS Systems Manager on AWS System Manager</description>
+    <generator>Hugo</generator>
+    <language>vi</language>
+    <atom:link href="https://levuxuanan.github.io/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/vi/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

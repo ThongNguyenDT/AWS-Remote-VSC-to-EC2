@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.132.0">
+    <meta name="description" content="">
+<meta name="author" content="journeyoftheaverageguy@gmail.com">
+
+    <link rel="icon" href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/images/favicon.png" type="image/png">
+
+    <title>Connect VScode using EC2_Instances_Connect and AWS Systems Manager :: AWS System Manager</title>
+
+    
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/nucleus.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/fontawesome-all.min.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/hybrid.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/featherlight.min.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/perfect-scrollbar.min.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/auto-complete.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/atom-one-dark-reasonable.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/theme.css?1723573434" rel="stylesheet">
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/hugo-theme.css?1723573434" rel="stylesheet">
+    
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/css/theme-workshop.css?1723573434" rel="stylesheet">
+    
+    
+
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/jquery-3.3.1.min.js?1723573434"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/lunr.min.js?1723573434"></script>
+<script type="text/javascript" src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/auto-complete.js?1723573434"></script>
+<script type="text/javascript">
+    
+        var baseurl = "https:\/\/levuxuanan.github.io\/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2\/";
+    
+</script>
+<script type="text/javascript" src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/search.js?1723573434"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/1-connect-vscode-to-aws-ec2-using-ssh/" title="Connect VSCode to AWS EC2 using SSH" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/1-connect-vscode-to-aws-ec2-using-ssh/">
+           <b> 1. </b> Connect VSCode to AWS EC2 using SSH
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/2-connect-vscode-to-aws-ec2-using-zerotier/" title="Connect VSCode to AWS EC2 using Zerotier" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/2-connect-vscode-to-aws-ec2-using-zerotier/">
+           <b> 2. </b> Connect VSCode to AWS EC2 using Zerotier
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/3-hosting-vs-code-on-ec2-from-amazon-linux-2/" title="Hosting VS Code on EC2 from Amazon Linux 2" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/3-hosting-vs-code-on-ec2-from-amazon-linux-2/">
+           <b> 3. </b> Hosting VS Code on EC2 from Amazon Linux 2
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/4-manually-deploy-vs-code-on-ec2/" title="Manually deploy VS Code on EC2" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/4-manually-deploy-vs-code-on-ec2/">
+           <b> 4. </b> Manually deploy VS Code on EC2
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/5-extended-create-an-ami-from-an-instance-and-run-an-instance-from-that-ami/" title="Appendix" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/5-extended-create-an-ami-from-an-instance-and-run-an-instance-from-that-ami/">
+           <b> 5. </b> Appendix
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/6-generate-vscode-from-ami-build-from-ec2-image-builder/" title="6-Generate VSCode from AMI build from EC2 Image Builder" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/6-generate-vscode-from-ami-build-from-ec2-image-builder/">
+           <b> 6. </b> 6-Generate VSCode from AMI build from EC2 Image Builder
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/" title="Connect VScode using EC2_Instances_Connect and AWS Systems Manager" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/">
+           <b> 7. </b> Connect VScode using EC2_Instances_Connect and AWS Systems Manager
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="https://levuxuanan.github.io/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/" selected>English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="https://levuxuanan.github.io/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/vi/7-connect-vscode-using-ec2_instances_connect-and-aws-systems-manager/">Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+    <b> Workshop</b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0"
+        title="Migrate" Alt="web counter" border="0" /></a> <br>
+    <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0"
+        title="Total Cloud Journey" Alt="web counter" border="0" />
+
+</left>
+<left>
+    <br>
+    <br>
+    <b> Last Updated </b> <br>
+    <i>
+        <font color=orange>11-08-2024</font>
+    </i>
+</left>
+<left>
+    <br>
+    <br>
+    <b> Author</b> <br>
+
+    <i> <a href="#" style="color:orange">Tien Thong</a> <br>
+        <a href="https://www.linkedin.com/in/levuxuanan/" style="color:orange">Xuan An</a> <br>
+        <a href="https://www.linkedin.com/in/anh-p-47063a13a/" style="color:orange">Hai An</a> <br>
+    </i>
+</left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            <a href='/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/'>REMOTE DEVELOPMENT WITH VS VSCODE AND EC2</a> > Connect VScode using EC2_Instances_Connect and AWS Systems Manager
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#ec2_instances_connect">EC2_Instances_Connect</a></li>
+    <li><a href="#aws-systems-manager">AWS Systems Manager</a>
+      <ul>
+        <li><a href="#step-1-set-up-the-necessary-endpoints">Step 1 Set up the necessary endpoints</a></li>
+        <li><a href="#step-2-configure-ec2">Step 2: Configure EC2</a></li>
+        <li><a href="#step-3-try-to-connect">Step 3: Try to connect</a></li>
+        <li><a href="#ec2_instances_connect-1">EC2_Instances_Connect</a></li>
+        <li><a href="#aws-systems-manager-1">AWS Systems Manager</a></li>
+        <li><a href="#step-4-connect-using-cli">Step 4: connect using CLI</a></li>
+        <li><a href="#ec2_instances_connect-2">EC2_Instances_Connect</a></li>
+        <li><a href="#aws-systems-manager-2">AWS Systems Manager</a></li>
+        <li><a href="#step-5-configure-vscode">Step 5: Configure VSCode</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Connect VScode using EC2_Instances_Connect and AWS Systems Manager
+            </h1>
+          
+
+        
+
+
+
+	<p>In this section we will connect vscode remote ssh to EC2 in private subnet</p>
+<p>through two different methods:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="ec2_instances_connect">EC2_Instances_Connect</h2>
+<h2 id="aws-systems-manager">AWS Systems Manager</h2>
+<h3 id="step-1-set-up-the-necessary-endpoints">Step 1 Set up the necessary endpoints</h3>
+<p>To connect ssh to ec2 in private connect, we need to connect through an intermediary device: it can be a bastion host, or endpoints</p>
+<p>Use <strong>EC2 Instance Connect Endpoint</strong></p>
+<p>Similar to the endpoint settings in the above article, we need to create endpoint as follows</p>
+<p><img alt="Untitled" src="/images/part7/7.step1-l-1.png"></p>
+<p>Use <strong>3 ssm endpoint connect</strong></p>
+<p>Similar to the endpoint settings in the above article, we need to create endpoint as follows</p>
+<p><img alt="Untitled" src="/images/part7/7.step1-r-1.png"></p>
+<p><img alt="Untitled" src="/images/part7/7.step1-r-2.png"></p>
+<p><img alt="Untitled" src="/images/part7/7.step1-r-3.png"></p>
+<p>Notes in the setup section:</p>
+<ul>
+<li>We need to point correctly to the VPC, subnet of EC2 that needs to be connected</li>
+<li>Need to open security group so that EC2 and endpoint can connect to each other</li>
+</ul>
+<p>Note:</p>
+<ul>
+<li>
+<p>We need to point correctly to the VPC, subnet of EC2 that needs to be connected</p>
+</li>
+<li>
+<p>Need to open security group so that EC2 and endpoint can connect to each other</p>
+</li>
+<li>
+<p>Need to create 3 endpoints including:</p>
+</li>
+<li>
+<p>com.amazonaws.us-east-1.ssm</p>
+</li>
+<li>
+<p>com.amazonaws.us-east-1.ssmmessages</p>
+</li>
+<li>
+<p>com.amazonaws.us-east-1.ec2messages</p>
+</li>
+</ul>
+<p><strong>EC2 Instance Connect</strong> allows us to directly create VPC <strong>endpoint</strong> in the <strong>connection</strong> section of ec2.</p>
+<p>EC2 Instance Connect does not require additional plugins</p>
+<p>EC2 Instance Connect does not require access to connect ec2 vs management service because it is a direct connection so no management service is needed</p>
+<p>Can only connect to 1 EC2, Set up each machine separately</p>
+<p>Easier configuration.</p>
+<p>You must set up these endpoints in the VPC Endpoint section</p>
+<p>Must set up the plugin for AWS CLI on the source device</p>
+<p>Must have SSM agent on EC2, note:</p>
+<ul>
+<li>Some default <strong>AMI</strong> already have agent configuration</li>
+<li><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ami-preinstalled-agent.html">You can refer to more here</a></li>
+</ul>
+<p>SSM is essentially a management service, so you <strong>need to grant permission</strong> to allow EC2 to interact with this service. You can refer to <a href="https://www.notion.so/REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2-aec58040853d4f229f7e1d1f930b417f?pvs=21">permission granting steps</a>, <a href="https://www.notion.so/REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2-aec58040853d4f229f7e1d1f930b417f?pvs=21">permission details</a></p>
+<p>Allows you to configure multiple devices at the same time, this is the content of the service <a href="https://us-east-1.console.aws.amazon.com/systems-manager/home"><strong>AWS Systems Manager</strong></a></p>
+<hr>
+<p>Both of these methods do not require:</p>
+<ul>
+<li>Setting up the ssh port for connection</li>
+<li>Public EC2 you go to the internet</li>
+<li>Install VScode user data packages</li>
+</ul>
+<hr>
+<h3 id="step-2-configure-ec2">Step 2: Configure EC2</h3>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Create the <strong>EC2 Instance Connect</strong> connection directly in the <strong>connect</strong> tab of ec2</p>
+<p><img alt="Untitled" src="/images/part7/7.step2.png"></p>
+<h3 id="step-3-try-to-connect">Step 3: Try to connect</h3>
+<h3 id="ec2_instances_connect-1">EC2_Instances_Connect</h3>
+<p><img alt="Untitled" src="/images/part7/7.step3-l-1.png"></p>
+<p>If you see the above 3 warnings and cannot connect to your ec2 in the EC2 Instance Connect tab, it means that your VPC and subnet settings are currently on the right track.</p>
+<p>Select by image</p>
+<p><img alt="Untitled" src="/images/part7/7.step3-l-2.png"></p>
+<p>if you get a yellow connect button result your sg and endpoint settings are correct</p>
+<p><img alt="Untitled" src="/images/part7/7.step3-l-3.png"></p>
+<p>if not read the troubleshooting steps on the side</p>
+<ul>
+<li>Select Connect</li>
+</ul>
+<p><img alt="Untitled" src="/images/part7/7.step3-l-4.png"></p>
+<h3 id="aws-systems-manager-1">AWS Systems Manager</h3>
+<p><img alt="Untitled" src="/images/part7/7.step3-r-1.png"></p>
+<p>In the Session Manager tab, if you see the yellow connection button as shown in the image, it means you have successfully established your connection</p>
+<p>If not, you can check the following settings:</p>
+<ul>
+<li>
+<p>Is your security group set up correctly, it is recommended that if you are not sure, you should set sg default for both your endpoint and EC2</p>
+</li>
+<li>
+<p>Check that your endpoints and subnets point to the same private subnet. Note that selecting the subnet for the endpoint in part one is setting the target for the endpoint to connect to, not the location of the endpoint.</p>
+</li>
+<li>
+<p>No need to set an endpoint for the public subnet</p>
+</li>
+<li>
+<p>Check if your AMI supports Agent ssm. If you reboot the instance, if not, you can delete it, and recreate it or proceed to connect EC2_Instances_Connect and install the agent</p>
+</li>
+<li>
+<p>Select Connect</p>
+</li>
+</ul>
+<p><img alt="Untitled" src="/images/part7/7.step3-r-2.png"></p>
+<h3 id="step-4-connect-using-cli">Step 4: connect using CLI</h3>
+<p>The next steps require that you have set up AWS CLI v2</p>
+<p>If you don&rsquo;t have it, you can refer to <a href="https://www.notion.so/REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2-aec58040853d4f229f7e1d1f930b417f?pvs=21">here</a></p>
+<h3 id="ec2_instances_connect-2">EC2_Instances_Connect</h3>
+<p>No other installation package required</p>
+<h3 id="aws-systems-manager-2">AWS Systems Manager</h3>
+<p>requires a plugin to connect the session on cli, if not <a href="https://www.notion.so/REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2-aec58040853d4f229f7e1d1f930b417f?pvs=21">you can refer to here</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>aws ec2-instance-connect ssh --instance-id &lt;instance_id&gt;
+</span></span></code></pre></div><p><img alt="Untitled" src="/images/part7/7.step4-l-1.png"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>aws ssm start-session --target &lt;instance_id&gt;
+</span></span></code></pre></div><p><img alt="Untitled" src="/images/part7/7.step4-r-1.png"></p>
+<h3 id="step-5-configure-vscode">Step 5: Configure VSCode</h3>
+<p>So we have successfully connected ec2 via cli, now we need to set them up to connect via vscode</p>
+<p><a href="https://www.notion.so/REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2-aec58040853d4f229f7e1d1f930b417f?pvs=21">We perform the same steps as connecting to EC2 on public subnet</a></p>
+<p>In the edit host step, we will create tunnels for ssh instead of using public ip</p>
+<p>The job is very simple, just configure your host file as follows</p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/6-generate-vscode-from-ami-build-from-ec2-image-builder/" title="6-Generate VSCode from AMI build from EC2 Image Builder"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/1-connect-vscode-to-aws-ec2-using-ssh/" title="Connect VSCode to AWS EC2 using SSH" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/clipboard.min.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/perfect-scrollbar.min.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/perfect-scrollbar.jquery.min.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/jquery.sticky.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/featherlight.min.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/highlight.pack.js?1723573434"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/modernizr.custom-3.6.0.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/learn.js?1723573434"></script>
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/js/hugo-learn.js?1723573434"></script>
+
+    <link href="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/mermaid/mermaid.css?1723573434" rel="stylesheet" />
+    <script src="/levuxuanan.github.io-REMOTE-DEVELOPMENT-WITH-VS-VSCODE-AND-EC2/mermaid/mermaid.js?1723573434"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+  function updateImageSources() {
+    
+    var images = document.querySelectorAll("img");
+    
+    
+    images.forEach(function(image) {
+      const fullSrc = image.src;
+
+      
+      const url = new URL(fullSrc);
+      
+        image.src = baseurl.concat(url.pathname);
+    });
+  }
+  updateImageSources()
+</script>
+  </body>
+</html>
